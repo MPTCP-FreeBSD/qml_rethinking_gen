@@ -136,16 +136,25 @@ def main(training_data):
 
     import os
 
-    # Set directory path and file name
-    directory = f"real_labels_nqubits_{nqubits}/training_data{training_data}_"
-    filename = "Train_Error"
+    # Get the current directory
+    current_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # Check if the directory exists, if not, create it
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    # Get the second-to-last folder name
+    parent_dir = os.path.dirname(current_dir)
+    second_last_folder = os.path.basename(parent_dir)
 
-    # Save the error value to the file
-    np.savetxt(os.path.join(directory, filename), [train_error])
+    # Define the "error_save" folder path within the second-to-last directory
+    error_save_folder = os.path.join(parent_dir, "qml_error_save")
+
+    # Check if the "error_save" folder exists, if not, create it
+    if not os.path.exists(error_save_folder):
+        os.makedirs(error_save_folder)
+
+    # Construct the file path
+    file_path = os.path.join(error_save_folder, f"{second_last_folder}_nqubits_{nqubits}_training_data_{training_data}_train_error.txt")
+
+    # Save the error value to the .txt file
+    np.savetxt(file_path, [train_error])
     
 
 
