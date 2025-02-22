@@ -36,11 +36,17 @@ os.chdir(current_directory)
 # List to store the paths of scripts to run
 scripts_to_run = []
 
+# List of folder names to include
+include = ['8']
+
 # Walk through the directory and find all accuracy_train.py and accuracy_test.py files
 for root, dirs, files in os.walk(current_directory):
     for file in files:
         if file in ["accuracy_train.py", "accuracy_test.py"]:
-            scripts_to_run.append(os.path.join(root, file))
+            print("root:",root)
+            print("file:",file)
+            if any(incl in root for incl in include):
+                scripts_to_run.append(os.path.join(root, file))
 
 # Function to extract the folder name and qubit number for sorting
 def extract_sorting_key(path):

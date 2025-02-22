@@ -128,12 +128,14 @@ def main(training_data):
             label_list[j] = np.random.randint(0, 4)
         
         train_accuracy = accuracy(best_params)
-        print('Test error: ',1-train_accuracy/100)
         
         test_error = 1-train_accuracy/100
-        print("Test_Error:",test_error)
+        r_corrupt = float(i/training_data)
         print("Training Data:",training_data)
         print("Number of Qubits:",nqubits)
+        print("Label Corruption Value R:",r_corrupt)
+        print("corrupt_value:",corrupt_value)
+        print("Test Error:",test_error)
         print("-"*20)
 
         import os
@@ -142,18 +144,21 @@ def main(training_data):
         current_dir = os.path.dirname(os.path.abspath(__file__))
 
         # Get the second-to-last folder name
-        parent_dir = os.path.dirname(current_dir)
-        second_last_folder = os.path.basename(parent_dir)
+        
+        last_folder = os.path.basename(current_dir)
+
+        print("current_dir:",current_dir)
+        print("last_folder:",last_folder)
 
         # Define the "error_save" folder path within the second-to-last directory
-        error_save_folder = os.path.join(parent_dir, "qml_error_save")
+        error_save_folder = os.path.join(current_dir, "qml_error_save")
 
         # Check if the "error_save" folder exists, if not, create it
         if not os.path.exists(error_save_folder):
             os.makedirs(error_save_folder)
 
         # Construct the file path
-        file_path = os.path.join(error_save_folder, f"{second_last_folder}_nqubits_{nqubits}_training_data_{training_data}_i_{i}test_error.txt")
+        file_path = os.path.join(error_save_folder, f"{last_folder}_nqubits_{nqubits}_training_data_{training_data}_i_{i}_test_error.txt")
 
         # Save the error value to the .txt file
         np.savetxt(file_path, [test_error])
@@ -164,4 +169,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--training_data", default=4, type=int)
     args = parser.parse_args()
-    main(**vars(args))
+    for train_data in [4,6,8]:
+        args.training_data = train_data
+        main(**vars(args))
+
